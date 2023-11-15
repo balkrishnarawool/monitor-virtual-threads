@@ -33,5 +33,5 @@ build/
 .vscode/
 
 *.jfr
-/thread_dump.json
+/threaddump.json
 /heapdump.hprof

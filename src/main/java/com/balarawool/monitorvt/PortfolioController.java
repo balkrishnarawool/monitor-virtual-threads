@@ -22,11 +22,11 @@ public class PortfolioController {
     record Ticker(String ticker) {}
 
     private DataStore dataStore;
-    private Lock lock;
+//    private Lock lock;
 
     public PortfolioController(DataStore dataStore) {
         this.dataStore = dataStore;
-        this.lock = new ReentrantLock();
+//        this.lock = new ReentrantLock();
     }
 
     @GetMapping("/revenue")
