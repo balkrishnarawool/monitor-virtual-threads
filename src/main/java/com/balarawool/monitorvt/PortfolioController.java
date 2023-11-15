@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @RestController
 public class PortfolioController {
@@ -19,9 +22,11 @@ public class PortfolioController {
     record Ticker(String ticker) {}
 
     private DataStore dataStore;
+    private Lock lock;
 
     public PortfolioController(DataStore dataStore) {
         this.dataStore = dataStore;
+        this.lock = new ReentrantLock();
     }
 
     @GetMapping("/revenue")
@@ -53,6 +58,21 @@ public class PortfolioController {
     Liabilities liabilities(@RequestParam Map<String, String> params) {
         return new Liabilities(dataStore.getLiabilities(params.get("name")));
     }
+
+//    @GetMapping("/equity")
+//    Equity equity(@RequestParam Map<String, String> params) {
+//        try {
+//            if(lock.tryLock(10, TimeUnit.SECONDS)){
+//                return new Equity(dataStore.getEquity(params.get("name")));
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } finally{
+//            //release lock
+//            lock.unlock();
+//        }
+//        throw new IllegalStateException("Cannot return data. No lock acquired on DataStore or error during acquiring lock.");
+//    }
 
     @GetMapping("/equity")
     Equity equity(@RequestParam Map<String, String> params) {
